@@ -1,0 +1,5 @@
+.turbo
+.github
+pnpm-lock.yaml
+turbo.json
+*.sublime-project
