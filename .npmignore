@@ -3,3 +3,8 @@
 pnpm-lock.yaml
 turbo.json
 *.sublime-project
+*.sublime-workspace
+coverage
+.changeset
+src
+

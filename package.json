@@ -1,5 +1,5 @@
 {
-   "name": "jsontable",
+   "name": "@lubelski/json-table",
    "version": "0.0.1",
    "description": "A table for easily displaying json values",
    "keywords": [
@@ -12,7 +12,7 @@
    "author": "William Lubelski <will.lubelski@gmail.com>",
    "repository": {
       "type": "git",
-      "url": "https://github.com/lubelski/json-table"
+      "url": "git+https://github.com/lubelski/json-table.git"
    },
    "license": "MIT",
    "scripts": {
@@ -82,5 +82,9 @@
    "dependencies": {
       "humanize-key": "^0.3.0",
       "lodash": "^4.17.21"
-   }
+   },
+   "bugs": {
+      "url": "https://github.com/lubelski/json-table/issues"
+   },
+   "homepage": "https://github.com/lubelski/json-table#readme"
 }
