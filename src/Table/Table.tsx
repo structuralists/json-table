@@ -1,5 +1,8 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { cloneElement } from 'react'
+import isEmpty from 'lodash/isEmpty'
+import size from 'lodash/size'
+import { brand, isType } from './helpers'
 
 import {
    TableConfigurationProvider,
@@ -62,9 +65,10 @@ const Table = ({ fixed, children, ...rest }: TableProps) => {
    const style = {
       width: '100%',
       TableLayout: fixed ? 'fixed' : 'auto',
-      BorderCollapse: 'collapse',
+      borderCollapse: 'collapse',
    }
    return (
+      // @ts-ignore
       <table style={style} {...rest}>
          {children}
       </table>
@@ -72,11 +76,13 @@ const Table = ({ fixed, children, ...rest }: TableProps) => {
 }
 
 const wrapItem = (item: any, Class: any, index: number) => {
-   return item?.type === Class ? (
+   const el = isType(item, Class) ? (
       item
    ) : (
       <Class key={`quick-table-${Class?.type}-${item}-${index}`}>{item}</Class>
    )
+
+   return cloneElement(el, { index })
 }
 
 type ChildList = React.ReactNode[] | React.ReactNode | undefined
@@ -89,13 +95,13 @@ const wrapList = (children: ChildList, Class: any) => {
 
 type TrProps = {
    isOffset?: boolean
-   isBottom?: boolean
+   isFirst?: boolean
 } & React.ComponentProps<'tr'>
 
-const Tr = ({ isOffset, isBottom, ...rest }: TrProps) => {
+const Tr = ({ isOffset, isFirst, ...rest }: TrProps) => {
    const style = {
-      borderBottom: !isBottom ? '1px solid #CCC' : 'none',
-      backgroundColor: isOffset ? '#EEE' : '#FFF',
+      borderTop: isFirst ? 'none' : '1px solid #CCC',
+      backgroundColor: isOffset ? '#FAFAFA' : '#FFF',
    }
    return <tr style={style} {...rest} />
 }
@@ -107,33 +113,48 @@ type TdProps = {
    width?: string
 } & React.ComponentProps<'td'>
 
-const Td = ({ isFirst, bare, compact, width, ...rest }: TdProps) => {
+const Td = (props: TdProps) => {
+   const { isFirst, bare, compact, width, ...rest } = props
+
    const style = {
       ...textFontStyles,
       color: '#222',
       padding: bare ? '0' : compact ? '4px 6px' : '8px',
-      TextAlign: 'left',
-      borderLeft: '1px solid #ccc',
+
+      textAlign: 'left',
+      borderLeft: isFirst ? 'none' : '1px solid #ccc',
       width: width || 'auto',
       verticalAlign: 'top',
       lineHeight: '1.25',
    }
+   // @ts-ignore
    return <td style={style} {...rest} />
 }
 
 type CellProps = {
+   index?: number
    width?: string
    bare?: boolean
    children: React.ReactNode
 }
 
-const Cell: React.FC<CellProps> = (props) => {
+const Cell = brand('Cell', (props: CellProps) => {
+   const { index, ...rest } = props
    const { compact } = useTableConfiguration()
-   return <Td compact={compact} {...props} />
+   return <Td compact={compact} isFirst={index === 0} {...rest} />
+})
+
+type RowProps = {
+   index?: number
+   children: React.ReactNode
 }
 
-const Row: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-   return <Tr>{wrapList(children, Cell)}</Tr>
+const Row = ({ index, children }: RowProps) => {
+   return (
+      <Tr isFirst={index === 0} isOffset={(index || 0) % 2 === 1}>
+         {wrapList(children, Cell)}
+      </Tr>
+   )
 }
 
 type ThProps = {
@@ -143,7 +164,9 @@ type ThProps = {
    width?: string
 } & React.ComponentProps<'th'>
 
-const Th = ({ isFirst, bare, compact, width, ...rest }: ThProps) => {
+const Th = (props: ThProps) => {
+   const { isFirst, bare, compact, width, ...rest } = props
+
    const style = {
       ...labelStyles,
       color: '#222',
@@ -153,6 +176,7 @@ const Th = ({ isFirst, bare, compact, width, ...rest }: ThProps) => {
       borderLeft: isFirst ? 'none' : '1px solid #CCC',
       backgroundColor: '#EEE',
    }
+
    return <th style={style} {...rest} />
 }
 
@@ -166,10 +190,15 @@ const Message = (props: React.ComponentProps<'div'>) => {
    return <div {...props} />
 }
 
-const HeaderCell: React.FC = (props) => {
-   const { compact } = useTableConfiguration()
-   return <Th compact={compact} {...props} />
+type HeaderCellProps = {
+   index?: number
 }
+
+const HeaderCell = brand('HeaderCell', (props: HeaderCellProps) => {
+   const { index, ...rest } = props
+   const { compact } = useTableConfiguration()
+   return <Th compact={compact} isFirst={index === 0} {...rest} />
+})
 
 const HeaderRow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
    <thead>
@@ -193,15 +222,19 @@ const QuickTable = (props: Props) => {
       <HeaderRow>{wrapList(columns, HeaderCell)}</HeaderRow>
    )
 
-   const contents = !_.isEmpty(children) ? (
-      wrapList(children, Row)
-   ) : (
-      <tr>
-         <td colSpan={_.size(columns) || 100}>
-            <Message>Empty List</Message>
-         </td>
-      </tr>
-   )
+   const contents = (() => {
+      if (isEmpty(children)) {
+         return (
+            <tr>
+               <td colSpan={size(columns) || 100}>
+                  <Message>Empty List</Message>
+               </td>
+            </tr>
+         )
+      }
+      const rows = wrapList(children, Row)
+      return rows
+   })()
 
    return (
       <TableConfigurationProvider compact={compact} bare={bare}>
