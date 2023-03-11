@@ -2,19 +2,16 @@ import { useMemo, useState, memo } from 'react'
 import _ from 'lodash'
 import { COLORS } from './colors'
 import type { JsonDisplayType } from './colors'
-
-const textStyles = {
-   fontFamily: "'Fira Code', monpspace",
-   WordBreak: 'break-word',
-}
+import { textFontStyles } from './styles/styles'
 
 type ValueProps = { type: JsonDisplayType } & React.ComponentProps<'span'>
 
 const Value = ({ type, ...rest }: ValueProps) => {
    const style = {
-      ...textStyles,
+      ...textFontStyles,
       color: type ? COLORS[type] : COLORS['unknown'],
    }
+   // @ts-ignore
    return <span style={style} {...rest} />
 }
 
@@ -22,11 +19,12 @@ const JsonFunc = ({ func }: { func?: any }) => {
    const value = useMemo(() => `${func}`, [func])
 
    const style = {
-      ...textStyles,
+      ...textFontStyles,
       color: COLORS['function'],
       fontSize: '0.8em',
    }
 
+   // @ts-ignore
    return <span style={style}>{value}</span>
 }
 
@@ -98,6 +96,10 @@ const getType = (args: Args): JsonDisplayType => {
       return 'emptyObject'
    }
 
+   if (typeof value === 'symbol') {
+      return 'symbol'
+   }
+
    return 'unknown'
 }
 
@@ -160,7 +162,8 @@ const Primitive = memo(({ type, jsonKey, value }: Props) => {
       return <Value type="emptyObject">{`{}`}</Value>
    }
 
-   return <Value type={resolvedType}>{`${value}`}</Value>
+   // @ts-ignore
+   return <Value type={resolvedType}>{`${value?.toString() || value}`}</Value>
 })
 
 export default Primitive

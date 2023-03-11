@@ -36,7 +36,6 @@ const JsonTable = memo((props: Props) => {
    const { json, title, compact, bare, humanizeKeys, ...rest } = props
 
    if (isEmpty(json)) {
-      console.log('empty', json)
       return (
          <QuickTable title={title} compact={compact} bare={bare} {...rest}>
             <Primitive value={json} />
@@ -45,7 +44,6 @@ const JsonTable = memo((props: Props) => {
    }
 
    if (isArray(json) && isPlainObject(first(json))) {
-      console.log('array of objects', json)
       return (
          <QuickTable title={title} compact={compact} bare={bare} {...rest}>
             {map(json, (item, index) => (
@@ -62,7 +60,6 @@ const JsonTable = memo((props: Props) => {
    }
 
    if (isArray(json) || (isObject(json) && isPlainObject(json))) {
-      console.log('plain object', json)
       const width = getWidth(json, humanizeKeys)
       const sorted = sortObject(json)
 
@@ -100,8 +97,6 @@ const JsonTable = memo((props: Props) => {
          </QuickTable>
       )
    }
-
-   console.log('none of the above', json)
 
    return (
       <QuickTable title={title} compact={compact} bare={bare}>

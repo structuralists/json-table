@@ -3,22 +3,11 @@ import React, { cloneElement } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import size from 'lodash/size'
 import { brand, isType } from './helpers'
-
+import { textFontStyles, labelFontStyles } from '../styles/styles'
 import {
    TableConfigurationProvider,
    useTableConfiguration,
 } from './TableConfig'
-
-const textFontStyles = {
-   WhiteSpace: 'pre-wrap',
-   fontWeight: 300,
-}
-
-const labelStyles = {
-   fontSize: '12px',
-   fontWeight: 600,
-   lineHeight: 1,
-}
 
 type WrapperProps = { bare?: boolean } & React.ComponentProps<'div'>
 
@@ -47,7 +36,7 @@ type TitleProps = { compact?: boolean } & React.ComponentProps<'div'>
 
 const Title = ({ compact, ...rest }: TitleProps) => {
    const style = {
-      ...labelStyles,
+      ...labelFontStyles,
       color: '#333',
       padding: compact ? '4px' : '8px',
       backgroundColor: '#eee',
@@ -64,9 +53,10 @@ type TableProps = {
 const Table = ({ fixed, children, ...rest }: TableProps) => {
    const style = {
       width: '100%',
-      TableLayout: fixed ? 'fixed' : 'auto',
+      tableLayout: fixed ? 'fixed' : 'auto',
       borderCollapse: 'collapse',
    }
+
    return (
       // @ts-ignore
       <table style={style} {...rest}>
@@ -120,7 +110,6 @@ const Td = (props: TdProps) => {
       ...textFontStyles,
       color: '#222',
       padding: bare ? '0' : compact ? '4px 6px' : '8px',
-
       textAlign: 'left',
       borderLeft: isFirst ? 'none' : '1px solid #ccc',
       width: width || 'auto',
@@ -157,32 +146,33 @@ const Row = ({ index, children }: RowProps) => {
    )
 }
 
-type ThProps = {
+type ThProps = React.ComponentProps<'th'> & {
    isFirst?: boolean
    bare?: boolean
    compact?: boolean
    width?: string
-} & React.ComponentProps<'th'>
+}
 
 const Th = (props: ThProps) => {
    const { isFirst, bare, compact, width, ...rest } = props
 
    const style = {
-      ...labelStyles,
+      ...labelFontStyles,
       color: '#222',
       padding: compact ? '6px' : '12px',
-      TextAlign: 'left',
+      textAlign: 'left',
       borderBottom: '1px solid #CCC',
       borderLeft: isFirst ? 'none' : '1px solid #CCC',
       backgroundColor: '#EEE',
    }
 
+   // @ts-ignore
    return <th style={style} {...rest} />
 }
 
 const Message = (props: React.ComponentProps<'div'>) => {
    const style = {
-      ...labelStyles,
+      ...labelFontStyles,
       textAlign: 'center',
       padding: '20px',
       color: '#888',
