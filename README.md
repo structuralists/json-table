@@ -1,5 +1,5 @@
 Show json as a table
 
-[![CI](https://github.com/lubelski/json-table/actions/workflows/main.yml/badge.svg)](https://github.com/lubelski/json-table/actions/workflows/main.yml)
+[![CI](https://github.com/structuralists/json-table/actions/workflows/main.yml/badge.svg)](https://github.com/structuralists/json-table/actions/workflows/main.yml)
 
-[![Publish](https://github.com/lubelski/json-table/actions/workflows/publish.yml/badge.svg)](https://github.com/lubelski/json-table/actions/workflows/publish.yml)
+[![Publish](https://github.com/structuralists/json-table/actions/workflows/publish.yml/badge.svg)](https://github.com/structuralists/json-table/actions/workflows/publish.yml)
