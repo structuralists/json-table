@@ -43,6 +43,7 @@ const Title = ({ compact, ...rest }: TitleProps) => {
       backgroundColor: '#eee',
       borderBottom: '1px solid #ccc',
    }
+   // @ts-ignore
    return <div style={style} {...rest} />
 }
 
@@ -178,7 +179,8 @@ const Message = (props: React.ComponentProps<'div'>) => {
       padding: '20px',
       color: '#888',
    }
-   return <div {...props} />
+   // @ts-ignore
+   return <div style={style} {...props} />
 }
 
 type HeaderCellProps = {
