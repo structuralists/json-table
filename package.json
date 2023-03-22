@@ -1,5 +1,5 @@
 {
-   "name": "@lubelski/json-table",
+   "name": "@structuralists/json-table",
    "version": "0.0.1",
    "description": "A table for easily displaying json values",
    "keywords": [
@@ -12,7 +12,7 @@
    "author": "William Lubelski <will.lubelski@gmail.com>",
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/lubelski/json-table.git"
+      "url": "git+https://github.com/structuralists/json-table.git"
    },
    "license": "MIT",
    "scripts": {
@@ -84,7 +84,7 @@
       "lodash": "^4.17.21"
    },
    "bugs": {
-      "url": "https://github.com/lubelski/json-table/issues"
+      "url": "https://github.com/structuralists/json-table/issues"
    },
-   "homepage": "https://github.com/lubelski/json-table#readme"
+   "homepage": "https://github.com/structuralists/json-table#readme"
 }
