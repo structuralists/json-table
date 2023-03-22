@@ -37,6 +37,7 @@ type TitleProps = { compact?: boolean } & React.ComponentProps<'div'>
 const Title = ({ compact, ...rest }: TitleProps) => {
    const style = {
       ...labelFontStyles,
+      textAlign: 'left',
       color: '#333',
       padding: compact ? '4px' : '8px',
       backgroundColor: '#eee',
